@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "0C466376-21B9-4083-BE55-66D35EDB0A68",
+      "id" : "E8DA0D24-DC36-468A-AC87-223C03D79BF0",
       "name" : "Configuration 1",
       "options" : {
 
@@ -9,15 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : {
-      "targets" : [
-        {
-          "containerPath" : "container:EssentialFeed.xcodeproj",
-          "identifier" : "70E042CF2BEE1C1300A1590D",
-          "name" : "EssentialFeed"
-        }
-      ]
-    },
     "testExecutionOrdering" : "random"
   },
   "testTargets" : [
