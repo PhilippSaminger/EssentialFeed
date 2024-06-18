@@ -73,12 +73,12 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         let (sut, client) = makeSUT()
         
         let item1 = makeItem(id: UUID(),
-                             imageURL: URL(string: "www.test1.at")!)
+                             url: URL(string: "www.test1.at")!)
         
         let item2 = makeItem(id: UUID(),
                              description: "a description",
                              location: "a location",
-                             imageURL: URL(string: "www.test2.at")!)
+                             url: URL(string: "www.test2.at")!)
         
         let items = [item1.model, item2.model]
         
@@ -121,12 +121,12 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
     private func makeItem(id: UUID,
                           description: String? = nil,
                           location: String? = nil,
-                          imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
-        let item = FeedItem(id: id, description: description, location: location, imageURL: imageURL)
+                          url: URL) -> (model: FeedImage, json: [String: Any]) {
+        let item = FeedImage(id: id, description: description, location: location, url: url)
         let json = ["id": id.uuidString,
                     "description": description,
                     "location": location,
-                    "image": imageURL.absoluteString].reduce(into: [String: Any]()) { (acc, e) in
+                    "image": url.absoluteString].reduce(into: [String: Any]()) { (acc, e) in
             if let value = e.value { acc[e.key] = value }
         }
         return (item, json)
