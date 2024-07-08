@@ -26,6 +26,7 @@
 		70E042EB2BEE1D1A00A1590D /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E042EA2BEE1D1A00A1590D /* FeedLoader.swift */; };
 		70E042EF2BEE410300A1590D /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70E042EE2BEE410300A1590D /* RemoteFeedLoader.swift */; };
 		70F3D3EF2C3C3B0F003CCD28 /* LoadFeedFromCacheUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F3D3EE2C3C3B0F003CCD28 /* LoadFeedFromCacheUseCaseTests.swift */; };
+		70F3D3F12C3C3BE2003CCD28 /* FeedStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F3D3F02C3C3BE2003CCD28 /* FeedStoreSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		70E042EA2BEE1D1A00A1590D /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
 		70E042EE2BEE410300A1590D /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
 		70F3D3EE2C3C3B0F003CCD28 /* LoadFeedFromCacheUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromCacheUseCaseTests.swift; sourceTree = "<group>"; };
+		70F3D3F02C3C3BE2003CCD28 /* FeedStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				700BBC3C2BFF92E800CDC09B /* XCTestCase+MemoryLeakTracking.swift */,
+				70F3D3F02C3C3BE2003CCD28 /* FeedStoreSpy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 			files = (
 				70E042DE2BEE1C1400A1590D /* LoadFeedFromRemoteUseCaseTests.swift in Sources */,
 				704AB3442BFD128A000A206F /* URLSessionHTTPClientTests.swift in Sources */,
+				70F3D3F12C3C3BE2003CCD28 /* FeedStoreSpy.swift in Sources */,
 				7000814D2C19F14D00A9B7EF /* CacheFeedUseCaseTests.swift in Sources */,
 				70F3D3EF2C3C3B0F003CCD28 /* LoadFeedFromCacheUseCaseTests.swift in Sources */,
 				700BBC3D2BFF92E800CDC09B /* XCTestCase+MemoryLeakTracking.swift in Sources */,
