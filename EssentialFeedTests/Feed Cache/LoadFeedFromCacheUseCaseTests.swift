@@ -19,8 +19,8 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     }
     
     func test_load_failsOnRetrievalError() {
-        let (sut, store) = makeSUT()
         let retrievalError = anyNSError()
+        let (sut, store) = makeSUT()
 
         expect(sut, toCompleteWith: .failure(retrievalError), when: {
             store.completeRetrieval(with: retrievalError)
@@ -35,6 +35,39 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         })
     }
     
+    func test_load_deliversCachedImagesOnLessThen7DaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixedCurrentDate = Date()
+        let lessThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        
+        expect(sut, toCompleteWith: .success(feed.models), when: {
+            store.completeRetrieval(with: feed.local, timestamp: lessThan7DaysOldTimestamp)
+        })
+    }
+    
+    func test_load_deliversNoImagesOn7DaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixedCurrentDate = Date()
+        let seven7DaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        
+        expect(sut, toCompleteWith: .success([]), when: {
+            store.completeRetrieval(with: feed.local, timestamp: seven7DaysOldTimestamp)
+        })
+    }
+    
+    func test_load_deliversNoImagesOnMoreThan7DaysOldCache() {
+        let feed = uniqueImageFeed()
+        let fixedCurrentDate = Date()
+        let moreThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+        let (sut, store) = makeSUT(currentDate: { fixedCurrentDate })
+        
+        expect(sut, toCompleteWith: .success([]), when: {
+            store.completeRetrieval(with: feed.local, timestamp: moreThan7DaysOldTimestamp)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(currentDate: @escaping () -> Date = Date.init,
@@ -45,10 +78,6 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(store, file: file, line: line)
         return (sut, store)
-    }
-    
-    private func anyNSError() -> NSError {
-        NSError(domain: "any error", code: 0)
     }
     
     private func expect(_ sut: LocalFeedLoader,
@@ -79,4 +108,29 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         }
     
+    private func anyNSError() -> NSError {
+        NSError(domain: "any error", code: 0)
+    }
+    
+    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let feed = [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())]
+        let localFeed = feed.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url)}
+        return (feed, localFeed)
+    }
+    
+    private func anyURL() -> URL  {
+        URL(string: "https://www.test.at")!
+    }
+    
+}
+
+private extension Date {
+    
+    func adding(days: Int) -> Date {
+        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: TimeInterval) -> Date {
+        self + seconds
+    }
 }
