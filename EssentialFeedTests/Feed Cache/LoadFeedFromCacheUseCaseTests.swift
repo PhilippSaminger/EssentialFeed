@@ -21,7 +21,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_load_failsOnRetrievalError() {
         let retrievalError = anyNSError()
         let (sut, store) = makeSUT()
-
+        
         expect(sut, toCompleteWith: .failure(retrievalError), when: {
             store.completeRetrieval(with: retrievalError)
         })
@@ -68,16 +68,16 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         })
     }
     
-    func test_load_deletesCacheOnRetrievalError() {
+    func test_load_hasNoSideEffectsOnRetrievalError() {
         let (sut, store) = makeSUT()
         
         sut.load { _ in }
         store.completeRetrieval(with: anyNSError())
         
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeedMessage])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesNotDeleteCacheOnEmptyCache() {
+    func test_load_hasNoSideEffectsOnEmptyCache() {
         let (sut, store) = makeSUT()
         
         sut.load { _ in }
@@ -86,7 +86,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesNotDeleteCacheOnLessThan7DaysOldCache() {
+    func test_load_hasNoSideEffectsOnLessThan7DaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let lessThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
@@ -98,7 +98,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesDeleteCacheOn7DaysOldCache() {
+    func test_load_hasNoSideEffectsOn7DaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let seven7DaysOldTimestamp = fixedCurrentDate.adding(days: -7)
@@ -107,10 +107,10 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         sut.load { _ in }
         store.completeRetrieval(with: feed.local, timestamp: seven7DaysOldTimestamp)
         
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeedMessage])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
-    func test_load_doesDeleteCacheOnMoreThan7DaysOldCache() {
+    func test_load_hasNoSideEffectsOnMoreThan7DaysOldCache() {
         let feed = uniqueImageFeed()
         let fixedCurrentDate = Date()
         let moreThan7DaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
@@ -119,7 +119,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         sut.load { _ in }
         store.completeRetrieval(with: feed.local, timestamp: moreThan7DaysOldTimestamp)
         
-        XCTAssertEqual(store.receivedMessages, [.retrieve, .deleteCacheFeedMessage])
+        XCTAssertEqual(store.receivedMessages, [.retrieve])
     }
     
     func test_load_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
@@ -149,7 +149,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
     }
     
     private func expect(_ sut: LocalFeedLoader,
-                        toCompleteWith expectedResult: LocalFeedLoader.LoadResult, 
+                        toCompleteWith expectedResult: LocalFeedLoader.LoadResult,
                         when action: () -> Void,
                         file: StaticString = #filePath,
                         line: UInt = #line) {
@@ -174,31 +174,6 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         
         action()
         wait(for: [exp], timeout: 1.0)
-        }
-    
-    private func anyNSError() -> NSError {
-        NSError(domain: "any error", code: 0)
     }
     
-    private func uniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
-        let feed = [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())]
-        let localFeed = feed.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url)}
-        return (feed, localFeed)
-    }
-    
-    private func anyURL() -> URL  {
-        URL(string: "https://www.test.at")!
-    }
-    
-}
-
-private extension Date {
-    
-    func adding(days: Int) -> Date {
-        Calendar(identifier: .gregorian).date(byAdding: .day, value: days, to: self)!
-    }
-    
-    func adding(seconds: TimeInterval) -> Date {
-        self + seconds
-    }
 }
