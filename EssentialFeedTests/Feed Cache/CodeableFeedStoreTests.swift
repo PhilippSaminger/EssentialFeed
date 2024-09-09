@@ -32,7 +32,11 @@ class CodeableFeedStore {
         }
     }
     
-    private let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
+    private let storeURL: URL
+    
+    init(storeURL: URL) {
+        self.storeURL = storeURL
+    }
     
     func retrieve(completion: @escaping FeedStore.RetreivalCompletion) {
         guard let data = try? Data(contentsOf: storeURL) else {
@@ -57,18 +61,16 @@ class CodeableFeedStoreTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
-        try? FileManager.default.removeItem(at: storeURL)
+        deleteStoreArtifacts()
     }
     
     override func tearDown() {
         super.tearDown()
-        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
-        try? FileManager.default.removeItem(at: storeURL)
+        deleteStoreArtifacts()
     }
     
     func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = CodeableFeedStore()
+        let sut = makeSUT()
         let exp = expectation(description: "Wait for cache retrieval")
         sut.retrieve { result in
             switch result {
@@ -86,7 +88,7 @@ class CodeableFeedStoreTests: XCTestCase {
     }
     
     func test_retrieve_hasNoSideEffectsOnEmptyCache() {
-        let sut = CodeableFeedStore()
+        let sut = makeSUT()
         let exp = expectation(description: "Wait for cache retrieval")
         sut.retrieve { firstResult in
             sut.retrieve { secondResult in
@@ -106,7 +108,7 @@ class CodeableFeedStoreTests: XCTestCase {
     }
     
     func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValues() {
-        let sut = CodeableFeedStore()
+        let sut = makeSUT()
         let feed = uniqueImageFeed().local
         let timestamp = Date()
         let exp = expectation(description: "Wait for cache retrieval")
@@ -129,5 +131,22 @@ class CodeableFeedStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 
+    // MARK: Helpers
+    
+    private var testSpecificStoreURL: URL {
+        FileManager.default.urls(for: .cachesDirectory,
+                                 in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store")
+    }
+    
+    private func makeSUT(file: StaticString = #filePath,
+                         line: UInt = #line) -> CodeableFeedStore {
+        let sut = CodeableFeedStore(storeURL: testSpecificStoreURL)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
+    
+    private func deleteStoreArtifacts() {
+        try? FileManager.default.removeItem(at: testSpecificStoreURL)
+    }
 
 }
