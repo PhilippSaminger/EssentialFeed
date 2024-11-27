@@ -1,5 +1,5 @@
 //
-//  Copyright © 2019 Essential Developer. All rights reserved.
+//  Created by Philipp Saminger
 //
 
 import UIKit
