@@ -25,6 +25,7 @@
 		7074370E2CF8C73C004E23D8 /* FeedLoaderCacheDecoratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7074370D2CF8C734004E23D8 /* FeedLoaderCacheDecoratorTests.swift */; };
 		707437102CF8F9FA004E23D8 /* FeedLoaderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7074370F2CF8F9F7004E23D8 /* FeedLoaderStub.swift */; };
 		707437122CF8FA7F004E23D8 /* XCTestCase+FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707437112CF8FA7A004E23D8 /* XCTestCase+FeedLoader.swift */; };
+		707437162CF90172004E23D8 /* FeedLoaderCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 707437152CF90170004E23D8 /* FeedLoaderCacheDecorator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		7074370D2CF8C734004E23D8 /* FeedLoaderCacheDecoratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecoratorTests.swift; sourceTree = "<group>"; };
 		7074370F2CF8F9F7004E23D8 /* FeedLoaderStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderStub.swift; sourceTree = "<group>"; };
 		707437112CF8FA7A004E23D8 /* XCTestCase+FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FeedLoader.swift"; sourceTree = "<group>"; };
+		707437152CF90170004E23D8 /* FeedLoaderCacheDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderCacheDecorator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				0895DA88234B3B950031BB2D /* SceneDelegate.swift */,
 				085BB637235A279C0013B282 /* FeedLoaderWithFallbackComposite.swift */,
 				082C00002359E3B2008927D3 /* FeedImageDataLoaderWithFallbackComposite.swift */,
+				707437152CF90170004E23D8 /* FeedLoaderCacheDecorator.swift */,
 				0895DA8C234B3B950031BB2D /* Main.storyboard */,
 				0895DA8F234B3B970031BB2D /* Assets.xcassets */,
 				0895DA91234B3B970031BB2D /* LaunchScreen.storyboard */,
@@ -267,6 +270,7 @@
 				082C00012359E3B2008927D3 /* FeedImageDataLoaderWithFallbackComposite.swift in Sources */,
 				0895DA87234B3B950031BB2D /* AppDelegate.swift in Sources */,
 				085BB638235A279D0013B282 /* FeedLoaderWithFallbackComposite.swift in Sources */,
+				707437162CF90172004E23D8 /* FeedLoaderCacheDecorator.swift in Sources */,
 				0895DA89234B3B950031BB2D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
